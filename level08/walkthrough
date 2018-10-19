@@ -1,0 +1,12 @@
+Pure Random ! A l'execution, le prog attend un arg sur stdin.
+
+
+1. gdb level8 / disas main
+2. On checkant plusieurs adresse on retrouve les mots login / auth / login /password
+3. en les essayant on voit des adresse se display et s'incrementer quand le mot est denouveaux utilise
+
+4. 	auth login
+	service
+	service
+	service
+	login

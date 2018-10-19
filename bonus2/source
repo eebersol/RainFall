@@ -1,0 +1,72 @@
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int32_t greetuser(void);
+
+int32_t g1 = 0; // ebp
+int32_t g2 = 0;
+
+int32_t greetuser(void) {
+    
+	int32_t str2;
+    char * str;
+
+    switch (g2) {
+        default: {
+            if (g2 == 0) {
+                str = (char *)0x6c6c6548;
+            }
+            str2 = 0;
+            strcat((char *)&str, (char *)&str2);
+            return puts((char *)&str);
+        }
+        case 1: {
+            str = (char *)-0x3c8986b8;
+            break;
+        }
+        case 2: {
+            str = (char *)0x64656f47;
+            break;
+        }
+    }
+    strcat((char *)&str, (char *)&str2);
+    return puts((char *)&str);
+}
+
+int main(int argc, char ** argv) {
+
+    int32_t v1 = 0; 
+    g1 = &v1;
+    int32_t result = 1;
+
+    if (argc == 3) {
+        int32_t str; 
+        __asm_rep_stosd_memset((char *)&str, 0, 19);
+        int32_t v2 = (int32_t)argv; 
+		char * v3 = (char *)&str; 
+        strncpy((char *)&str, (char *)*(int32_t *)(v2 + 4), 40);
+        int32_t str2 = 0; 
+        v3 = (char *)&str2;
+        strncpy((char *)&str2, (char *)*(int32_t *)(v2 + 8), 32);
+        v3 = "LANG";
+        char * env_val = getenv("LANG"); 
+        if (env_val != NULL) {
+            v3 = env_val;
+            if (memcmp((int32_t *)env_val, (int32_t *)"fi", 2) != 0) {
+                v3 = env_val;
+                if (memcmp((int32_t *)env_val, (int32_t *)"nl", 2) == 0) {
+                    g2 = 2;
+                }
+            } else {
+                g2 = 1;
+            }
+            __asm_rep_movsd_memcpy((char *)&v3, (char *)&str, 19);
+            return greetuser();
+        }
+        __asm_rep_movsd_memcpy((char *)&v3, (char *)&str, 19);
+        result = greetuser();
+    }
+    return result;
+}

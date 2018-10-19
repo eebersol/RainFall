@@ -1,0 +1,14 @@
+
+1. gdb level0
+2. disass level0
+3.
+	   0x08048ed4 <+20>:	call   0x8049710 <atoi>
+   		0x08048ed9 <+25>:	cmp    $0x1a7,%eax 			=> 0x1a7 -> 423
+4. ./level0 423
+5. cat /home/user/level1/.pass
+
+
+
+<!-- En ouvrant l'executables avec gdb, puis disas main, on voit un atoi des le depart avec un check retour sur 423 -> 0x1A7, peut etre le premier argument ?
+En essayant avec, un prompt apparait, cat /home/user/level1 -> get ur flag
+ -->

@@ -1,0 +1,67 @@
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+
+int p(char * str2, int32_t str);
+int pp(char * str);
+
+int g1 = false;
+
+int p(char * str2, int str) {
+    
+	puts((char *)str);
+    char buf[4096];
+    read(0, &buf, 0x1000);
+    *strchr((char *)&buf, 10) = 0;
+    return (int)strncpy(str2, (char *)&buf, 20);
+}
+
+int pp(char * str0) {
+    char str2[4096];
+
+    p((char *)&str2, (int)" - ");
+
+    char str3[4096];
+
+    p((char *)&str3, (int)" - ");
+
+    int v1 = (int)str0;
+
+    strcpy(str0, (char *)&str2);
+
+    int v2 = v1;
+    int v3 = -1;
+    int v4;
+    
+	while (true) {
+        
+        if (v3 == 0) {
+            *(int *)(v1 - 2) = 32;
+            return (int)strcat(str0, (char *)&str3);
+        }
+        
+        v4 = v3 - 1;
+
+        if (*(char *)v2 == 0) {
+            break;
+        }
+
+        v2 += (g1 ? -1 : 1);
+        v3 = v4;
+       
+    }
+  
+    *(int *)(v1 - 2 - v4) = 32;
+    return (int)strcat(str0, (char *)&str3);
+}
+
+int main(int argc, char ** argv) {
+    char str0[4096];
+
+    pp((char *)&str0);
+
+    puts((char *)&str0);
+    return 0;
+}

